@@ -42,6 +42,11 @@ struct MapScreen: View {
             }.tint(state.theme.secondaryText).padding(16)
         }
         .sheet(isPresented: $showingSettings) { SettingsView() }
+        .onAppear {
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("--preview-settings") { showingSettings = true }
+            #endif
+        }
         .sheet(isPresented: $showingMaps) { MapPickerView() }
         .sheet(isPresented: $showingPlaces, onDismiss: { selected = pendingSelection; pendingSelection = nil }) {
             PlaceListView(places: state.provinces, title: state.mapTitle) { pendingSelection = $0 }

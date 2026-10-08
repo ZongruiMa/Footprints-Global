@@ -24,8 +24,16 @@ xcodebuild -project TravelMemory.xcodeproj -scheme TravelMemory \
   -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO test \
   2>&1 | tee build-cloud/logs/ios-tests.log
 xcrun simctl install "$DEVICE" build-cloud/Simulator/Build/Products/Debug-iphonesimulator/TravelMemory.app
-xcrun simctl launch "$DEVICE" local.personal.travelmemory
-xcrun simctl io "$DEVICE" screenshot build-cloud/simulator.png
+for CASE in en-world ja-country:JPN ar-world; do
+  LANGUAGE=${CASE%%-*}
+  MAP=${CASE#*-}
+  xcrun simctl terminate "$DEVICE" local.personal.travelmemory 2>/dev/null || true
+  EXTRA=()
+  if [[ "$LANGUAGE" == ar ]]; then EXTRA+=(--preview-settings); fi
+  xcrun simctl launch "$DEVICE" local.personal.travelmemory --preview -interfaceLanguage "$LANGUAGE" -selectedMap "$MAP" "${EXTRA[@]}"
+  sleep 5
+  xcrun simctl io "$DEVICE" screenshot "build-cloud/simulator-${LANGUAGE}.png"
+done
 
 # An actual iphoneos/arm64 executable, not an iOS Simulator bundle.
 # No Apple account, certificate, or signing secret is sent to GitHub.

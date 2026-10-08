@@ -7,6 +7,21 @@ import UniformTypeIdentifiers
 @testable import TravelMemory
 
 struct PersistenceIntegrationTests {
+    @Test func expandedAtlasClassifiesPendingImportsWithoutOverwritingManualPlaces() async throws {
+        let store = try await makeStore()
+        let regions = try bundledProvinces()
+        let file = ImportedImage(fileName: "test-migration.jpg", width: 4, height: 4, date: nil,
+                                 coordinate: .init(longitude: 118.7969, latitude: 32.0603))
+        _ = try await store.addAutomaticallyClassified(file, identifier: "pending", provinces: [])
+        _ = try await store.addAutomaticallyClassified(file, identifier: "manual", provinces: [])
+        try await store.assign(["asset:manual"], to: "510000")
+        try await store.setNote("320000", text: "Existing note")
+        try await store.classifyPendingImports(provinces: regions)
+        let snapshot = try await store.snapshot()
+        #expect(snapshot.photosByProvince["320000"]?.count == 1)
+        #expect(snapshot.photosByProvince["510000"]?.count == 1)
+        #expect(snapshot.provinces["320000"]?.note == "Existing note")
+    }
     @MainActor @Test func authorizationTimeoutAllowsLateReplyWithoutDoubleResume() async {
         var reply: (@Sendable (PhotoAccess) -> Void)?
         let result = await PhotoAuthorizationWaiter().wait(timeout: .milliseconds(5)) { reply = $0 }

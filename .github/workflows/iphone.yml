@@ -52,6 +52,6 @@ jobs:
           path: |
             build-cloud/logs/
             build-cloud/Tests.xcresult/
-            build-cloud/simulator.png
+            build-cloud/simulator-*.png
           if-no-files-found: ignore
           retention-days: 3

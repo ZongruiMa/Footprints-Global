@@ -1,5 +1,23 @@
 # Third-party notices
 
+## Worldwide map data: Natural Earth
+
+Natural Earth, https://www.naturalearthdata.com/
+10m Admin 0 Countries and Admin 1 States/Provinces.
+Source revision: ca96624a56bd078437bca8184e78163e5039ad19.
+All Natural Earth map data are in the public domain:
+https://www.naturalearthdata.com/about/terms-of-use/
+
+Changes: repaired invalid geometry where necessary, simplified by 0.004
+degrees, retained multilingual names, and added app identifiers and hierarchy.
+The 34 original China-map records retain their geoBoundaries geometries and
+identifiers to preserve existing local records. Natural Earth's CHN, TWN,
+HKG and MAC subdivisions are replaced by those legacy records. Country
+outlines and retained region outlines can therefore differ near borders.
+Country/territory entries follow source map units and are not a count of
+sovereign states. Boundaries are approximate and express no endorsement.
+See docs/sources/world-provenance.json for URLs, hashes, and counts.
+
 ## Map data: geoBoundaries
 
 geoBoundaries, William & Mary geoLab and community contributors.

@@ -19,7 +19,7 @@ struct ProvinceSheet: View {
                             let value = !manualVisited
                             Task { await state.setVisited(province.id, value) }
                         }
-                        if !(state.photosByProvince[province.id] ?? []).isEmpty {
+                        if !state.photos(in: province.id).isEmpty {
                             Text(L("Photos keep this place marked."))
                         }
                     } label: { Label(L("Visited"), systemImage: manualVisited ? "checkmark.circle.fill" : "checkmark.circle") }.font(.subheadline)

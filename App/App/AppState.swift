@@ -59,9 +59,19 @@ import Observation
             if store == nil { store = try await DataStore.open() }
             try await refresh()
             await loadMap()
+            if !mapFailed, let store {
+                try await store.classifyPendingImports(provinces: atlas.classificationPlaces)
+                try await refresh()
+            }
             access = PhotoAuthorizationService.current
         } catch { startupError = L("Could not open local records.") + "\n" + error.localizedDescription }
         isLoading = false
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--preview") {
+            await completeOnboarding()
+            return
+        }
+        #endif
         if startupError == nil { await becameActive() }
     }
     func loadMap() async {

@@ -2,6 +2,20 @@ import Foundation
 import SwiftData
 
 extension DataStore {
+    /// A broader atlas can classify previously pending local copies without
+    /// asking for library access again or changing explicit manual choices.
+    func classifyPendingImports(provinces: [ProvinceDefinition]) throws {
+        let matcher = GeoMatcher(provinces: provinces)
+        var changed = false
+        for record in try modelContext.fetch(FetchDescriptor<PhotoRecord>())
+        where record.source == "imported" && !record.isRemoved && record.provinceID == nil && record.manualProvinceID == nil {
+            guard let longitude = record.longitude, let latitude = record.latitude,
+                  let region = matcher.province(for: .init(longitude: longitude, latitude: latitude)) else { continue }
+            record.provinceID = region.id
+            changed = true
+        }
+        if changed { try save() }
+    }
     func updateAvailability(_ visible: Set<String>, access: PhotoAccess) throws {
         var changed = false
         for record in try modelContext.fetch(FetchDescriptor<PhotoRecord>()) where record.source == "library" && !record.isRemoved {
