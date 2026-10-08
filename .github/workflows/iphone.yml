@@ -1,0 +1,57 @@
+name: Build iPhone App
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'App/**'
+      - 'Core/**'
+      - 'Tests/**'
+      - 'TravelMemory.xcodeproj/**'
+      - 'Package.swift'
+      - 'scripts/**'
+      - '.github/workflows/iphone.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: iphone-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 35
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Test and build for iPhone
+        run: bash scripts/build-cloud.sh
+      - name: Save installation package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Footprints-iPhone-${{ github.run_number }}
+          path: |
+            dist/Footprints.ipa
+            dist/SHA256SUMS.txt
+            dist/build-info.json
+            docs/INSTALL-WINDOWS.md
+          if-no-files-found: error
+          retention-days: 7
+      - name: Save diagnostics even if compilation fails
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Build-diagnostics-${{ github.run_number }}
+          path: |
+            build-cloud/logs/
+            build-cloud/Tests.xcresult/
+            build-cloud/simulator.png
+          if-no-files-found: ignore
+          retention-days: 3

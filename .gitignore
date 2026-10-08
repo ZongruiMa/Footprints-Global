@@ -1,0 +1,17 @@
+.DS_Store
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.venv/
+__pycache__/
+*.xcresult/
+dist/
+build-cloud/
+*.ipa
+*.p12
+*.mobileprovision
+.env
+.map-cache/
+artifacts/
+docs/validation/
