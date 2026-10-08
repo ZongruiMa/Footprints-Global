@@ -33,7 +33,7 @@ struct SettingsView: View {
                         Button(L("Manage selected photos")) { PhotoAuthorizationService.manageLimited() }
                     }
                     PhotosPicker(selection: $picked, maxSelectionCount: 200, matching: .images, preferredItemEncoding: .current, photoLibrary: .shared()) {
-                        Label(state.isImporting ? L("Importing…") : L("Choose photos to classify"), systemImage: "wand.and.stars")
+                        Label(L("Choose photos to classify"), systemImage: "wand.and.stars")
                     }.disabled(busy)
                     Text(L("Choose up to 200 photos. GPS stays on this device; iCloud originals may need a download.")).font(.footnote).foregroundStyle(.secondary)
                     if let summary = state.photoImportSummary { Text(summary).font(.footnote).textSelection(.enabled) }

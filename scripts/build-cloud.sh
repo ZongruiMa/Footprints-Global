@@ -28,9 +28,11 @@ for CASE in en-world ja-country:JPN ar-world; do
   LANGUAGE=${CASE%%-*}
   MAP=${CASE#*-}
   xcrun simctl terminate "$DEVICE" local.personal.travelmemory 2>/dev/null || true
-  EXTRA=()
-  if [[ "$LANGUAGE" == ar ]]; then EXTRA+=(--preview-settings); fi
-  xcrun simctl launch "$DEVICE" local.personal.travelmemory --preview -interfaceLanguage "$LANGUAGE" -selectedMap "$MAP" "${EXTRA[@]}"
+  if [[ "$LANGUAGE" == ar ]]; then
+    xcrun simctl launch "$DEVICE" local.personal.travelmemory --preview --preview-settings -interfaceLanguage "$LANGUAGE" -selectedMap "$MAP"
+  else
+    xcrun simctl launch "$DEVICE" local.personal.travelmemory --preview -interfaceLanguage "$LANGUAGE" -selectedMap "$MAP"
+  fi
   sleep 5
   xcrun simctl io "$DEVICE" screenshot "build-cloud/simulator-${LANGUAGE}.png"
 done
