@@ -1,5 +1,7 @@
 # Footprints Global
 
+[Validation and screenshots](docs/VALIDATION.md) · [Preview downloads](https://github.com/ZongruiMa/Footprints-Global/releases)
+
 An offline iPhone travel journal: explore a world map, choose a country or
 territory, mark visited regions, write notes, and group photos by embedded GPS.
 
