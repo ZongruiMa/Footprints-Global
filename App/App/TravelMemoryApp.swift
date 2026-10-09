@@ -33,3 +33,11 @@ struct TravelMemoryApp: App {
         }
     }
 }
+
+extension View {
+    /// Presentation roots may otherwise adopt the device's layout direction.
+    func appLocalization() -> some View {
+        environment(\.locale, Locale(identifier: AppLanguage.current))
+            .environment(\.layoutDirection, AppLanguage.current == "ar" ? .rightToLeft : .leftToRight)
+    }
+}

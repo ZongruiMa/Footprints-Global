@@ -47,6 +47,6 @@ struct ProvincePhotosView: View {
             guard !items.isEmpty else { return }
             Task { await state.importPhotos(items, to: provinceID); picked = [] }
         }
-        .fullScreenCover(item: $viewing) { photo in PhotoViewer(provinceID: provinceID, initialID: photo.id) }
+        .fullScreenCover(item: $viewing) { photo in PhotoViewer(provinceID: provinceID, initialID: photo.id).appLocalization() }
     }
 }

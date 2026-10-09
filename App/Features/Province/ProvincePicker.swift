@@ -5,6 +5,6 @@ struct ProvincePicker: View {
     @Environment(\.dismiss) private var dismiss
     let select: (String) -> Void
     var body: some View {
-        PlaceListView(places: state.atlas.classificationPlaces, title: L("Assign to…")) { select($0.id) }
+        PlaceListView(places: state.atlas.classificationPlaces, title: L("Assign to…")) { select($0.id) }.appLocalization()
     }
 }

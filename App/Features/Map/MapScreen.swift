@@ -41,17 +41,17 @@ struct MapScreen: View {
                 }.accessibilityLabel(L("Settings"))
             }.tint(state.theme.secondaryText).padding(16)
         }
-        .sheet(isPresented: $showingSettings) { SettingsView() }
+        .sheet(isPresented: $showingSettings) { SettingsView().appLocalization() }
         .onAppear {
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--preview-settings") { showingSettings = true }
             #endif
         }
-        .sheet(isPresented: $showingMaps) { MapPickerView() }
+        .sheet(isPresented: $showingMaps) { MapPickerView().appLocalization() }
         .sheet(isPresented: $showingPlaces, onDismiss: { selected = pendingSelection; pendingSelection = nil }) {
-            PlaceListView(places: state.provinces, title: state.mapTitle) { pendingSelection = $0 }
+            PlaceListView(places: state.provinces, title: state.mapTitle) { pendingSelection = $0 }.appLocalization()
         }
-        .sheet(item: $selected) { province in ProvinceSheet(province: province).presentationDetents([.fraction(0.88)]).presentationDragIndicator(.visible) }
-        .fullScreenCover(isPresented: Binding(get: { !state.snapshot.settings.hasCompletedOnboarding }, set: { _ in })) { OnboardingView() }
+        .sheet(item: $selected) { province in ProvinceSheet(province: province).appLocalization().presentationDetents([.fraction(0.88)]).presentationDragIndicator(.visible) }
+        .fullScreenCover(isPresented: Binding(get: { !state.snapshot.settings.hasCompletedOnboarding }, set: { _ in })) { OnboardingView().appLocalization() }
     }
 }
